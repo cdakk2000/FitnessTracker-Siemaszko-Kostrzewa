@@ -43,6 +43,17 @@ class UserServiceImpl implements UserService, UserProvider {
     }
 
     @Override
+    public Optional<User> getUserByFirstNameAndLastName(String firstName, String lastName) {
+        return userRepository.findByFirstNameAndLastName(firstName, lastName);
+    }
+
+    @Override
+    public List<User> getUsersByBirthDateBefore(LocalDate date) {
+        return userRepository.findByBirthDateBefore(date);
+    }
+
+
+    @Override
     public List<User> getUsersOlderThan(LocalDate date) {
         return userRepository.findByBirthDateBefore(date);
     }

@@ -2,6 +2,7 @@ package com.capgemini.wsb.fitnesstracker.user.internal;
 
 import com.capgemini.wsb.fitnesstracker.user.api.User;
 import com.capgemini.wsb.fitnesstracker.user.api.UserEmailSimpleDto;
+import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,28 @@ class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("User with ID: " + userId + " not found"));
     }
 
+    @GetMapping("/userEmail")
+    public UserDto getUserByEmail(@RequestParam String email) {
+        return userService.getUserByEmail(email)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new UserNotFoundException("User not found with email " + email));
+    }
+
+    @GetMapping("/searchByName")
+    public UserDto getUserByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
+        return userService.getUserByFirstNameAndLastName(firstName, lastName)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new UserNotFoundException("User with name " + firstName + " " + lastName + " was not found"));
+    }
+    @GetMapping("/searchByBirthDate")
+    public List<UserDto> getUsersByBirthDateBefore(@RequestParam String date) {
+        LocalDate birthDate = LocalDate.parse(date);
+        return userService.getUsersByBirthDateBefore(birthDate).stream()
+                .map(userMapper::toDto)
+                .toList();
+    }
+
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody UserDto userDto) throws InterruptedException {
@@ -79,13 +102,13 @@ class UserController {
         }
     }
 
-    @GetMapping("/email")
-    public List<UserEmailSimpleDto> getUserByEmail(@RequestParam String email) {
-        return userService.getUserByEmailIgnoreCase(email)
-                .stream()
-                .map(userEmailSimpleMapper::toEmailSimpleDto)
-                .toList();
-    }
+  //  @GetMapping("/email")
+  //  public List<UserEmailSimpleDto> getUserByEmail(@RequestParam String email) {
+  //      return userService.getUserByEmailIgnoreCase(email)
+  //              .stream()
+  //              .map(userEmailSimpleMapper::toEmailSimpleDto)
+  //              .toList();
+  //  }
 
     @GetMapping("/older/{time}")
     public List<UserDto> getUsersOlderThan(@PathVariable LocalDate time) {

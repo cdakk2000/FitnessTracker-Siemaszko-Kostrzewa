@@ -28,6 +28,15 @@ interface UserRepository extends JpaRepository<User, Long> {
                 .toList();
     }
 
+
+    Optional<User> findByFirstNameAndLastName(String firstName, String lastName);
+
+    default List<User> findByBirthDate(LocalDate birthDate) {
+        return findAll().stream()
+                .filter(user -> user.getBirthdate().equals(birthDate))
+                .toList();
+    }
+
     default List<User> findByBirthDateBefore(LocalDate date) {
         return findAll().stream()
                 .filter(user -> user.getBirthdate().isBefore(date))
