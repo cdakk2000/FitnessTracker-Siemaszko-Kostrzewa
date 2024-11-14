@@ -67,6 +67,7 @@ class UserController {
     }
 
 
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody UserDto userDto) throws InterruptedException {
