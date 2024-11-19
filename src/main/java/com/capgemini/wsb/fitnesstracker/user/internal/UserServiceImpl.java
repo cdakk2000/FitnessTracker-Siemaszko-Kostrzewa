@@ -48,9 +48,14 @@ class UserServiceImpl implements UserService, UserProvider {
     }
 
     @Override
-    public List<User> getUsersByBirthDateBefore(LocalDate date) {
-        return userRepository.findByBirthDateBefore(date);
+    public List<User> getUsersByEmailFragment(String emailFragment) {
+        return userRepository.findByEmailFragmentIgnoreCase(emailFragment);
     }
+
+//    @Override
+//    public List<User> getUsersByBirthDateBefore(LocalDate date) {
+//        return userRepository.findByBirthDateBefore(date);
+//    }
 
 
     @Override

@@ -52,19 +52,27 @@ class UserController {
                 .orElseThrow(() -> new UserNotFoundException("User not found with email " + email));
     }
 
+    @GetMapping("/searchByEmail")
+    public List<UserEmailSimpleDto> searchUsersByEmail(@RequestParam String emailFragment) {
+        return userService.getUsersByEmailFragment(emailFragment)
+                .stream()
+                .map(userEmailSimpleMapper::toDto)
+                .toList();
+    }
+
     @GetMapping("/searchByName")
     public UserDto getUserByFirstNameAndLastName(@RequestParam String firstName, @RequestParam String lastName) {
         return userService.getUserByFirstNameAndLastName(firstName, lastName)
                 .map(userMapper::toDto)
                 .orElseThrow(() -> new UserNotFoundException("User with name " + firstName + " " + lastName + " was not found"));
     }
-    @GetMapping("/searchByBirthDate")
-    public List<UserDto> getUsersByBirthDateBefore(@RequestParam String date) {
-        LocalDate birthDate = LocalDate.parse(date);
-        return userService.getUsersByBirthDateBefore(birthDate).stream()
-                .map(userMapper::toDto)
-                .toList();
-    }
+//    @GetMapping("/searchByBirthDate")
+//    public List<UserDto> getUsersByBirthDateBefore(@RequestParam String date) {
+//        LocalDate birthDate = LocalDate.parse(date);
+//        return userService.getUsersByBirthDateBefore(birthDate).stream()
+//                .map(userMapper::toDto)
+//                .toList();
+//    }
 
 
 

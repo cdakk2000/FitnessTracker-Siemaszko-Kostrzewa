@@ -13,8 +13,10 @@ public interface UserService {
 
     Optional<User> getUserByEmail(String email);
     Optional<User> getUserByFirstNameAndLastName(String firstName, String lastName);
-    List<User> getUsersByBirthDateBefore(LocalDate date);
+//    List<User> getUsersByBirthDateBefore(LocalDate date);
+    List<User> getUsersOlderThan(LocalDate date);
 
+    List<User> getUsersByEmailFragment(String emailFragment);
 
 
     User createUser(User user);
