@@ -9,11 +9,13 @@ public class TrainingMapper {
 
     public TrainingDto toDto(Training training) {
         return new TrainingDto(
-//                training.getId(),
-                training.getUser().getId(),
-                training.getUser().getFirstName(),
-                training.getUser().getLastName(),
-                training.getUser().getEmail(),
+                training.getId(),
+                new TrainingDto.UserDto(
+                        training.getUser().getId(),
+                        training.getUser().getFirstName(),
+                        training.getUser().getLastName(),
+                        training.getUser().getEmail()
+                ),
                 training.getStartTime(),
                 training.getEndTime(),
                 training.getActivityType().getDisplayName(),
@@ -23,8 +25,6 @@ public class TrainingMapper {
     }
 
     public Training toEntity(TrainingDto trainingDto) {
-        // Zakładając, że obiekt User i ActivityType zostaną dostarczone w serwisie
         throw new UnsupportedOperationException("Metoda do konwersji DTO na encję wymaga implementacji.");
     }
-
 }
