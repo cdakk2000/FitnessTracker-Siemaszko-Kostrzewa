@@ -22,7 +22,6 @@ interface UserRepository extends JpaRepository<User, Long> {
                         .findFirst();
     }
 
-
     default List<User> findByEmailFragmentIgnoreCase(String emailFragment) {
         return findAll().stream()
                 .filter(user -> user.getEmail().toLowerCase().contains(emailFragment.toLowerCase()))
@@ -42,6 +41,12 @@ interface UserRepository extends JpaRepository<User, Long> {
         return findAll().stream()
                 .filter(user -> user.getBirthdate().isBefore(date))
                 .toList();
+    }
+
+    default Optional<User> findByBirthdate(LocalDate birthdate) {
+        return findAll().stream()
+                .filter(user -> user.getBirthdate().equals(birthdate))
+                .findFirst();
     }
 
 }

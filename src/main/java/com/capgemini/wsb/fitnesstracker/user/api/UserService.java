@@ -13,7 +13,9 @@ public interface UserService {
 
     Optional<User> getUserByEmail(String email);
     Optional<User> getUserByFirstNameAndLastName(String firstName, String lastName);
-//    List<User> getUsersByBirthDateBefore(LocalDate date);
+
+    Optional<User> getUserByBirthdate(LocalDate birthdate);
+
     List<User> getUsersOlderThan(LocalDate date);
 
     List<User> getUsersByEmailFragment(String emailFragment);
@@ -22,4 +24,5 @@ public interface UserService {
     User createUser(User user);
     User updateUser(User user);
     void deleteUser(Long userId);
+
 }

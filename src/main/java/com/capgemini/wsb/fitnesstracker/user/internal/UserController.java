@@ -66,14 +66,14 @@ class UserController {
                 .map(userMapper::toDto)
                 .orElseThrow(() -> new UserNotFoundException("User with name " + firstName + " " + lastName + " was not found"));
     }
-//    @GetMapping("/searchByBirthDate")
-//    public List<UserDto> getUsersByBirthDateBefore(@RequestParam String date) {
-//        LocalDate birthDate = LocalDate.parse(date);
-//        return userService.getUsersByBirthDateBefore(birthDate).stream()
-//                .map(userMapper::toDto)
-//                .toList();
-//    }
 
+    @GetMapping("/searchByBirthdate")
+    public UserDto getUserByBirthdate(@RequestParam String date) {
+        LocalDate birthdate = LocalDate.parse(date);
+        return userService.getUserByBirthdate(birthdate)
+                .map(userMapper::toDto)
+                .orElseThrow(() -> new UserNotFoundException("User with birthdate " + date + " not found"));
+    }
 
 
     @PostMapping
@@ -82,7 +82,6 @@ class UserController {
         try {
             User user = userMapper.toEntity(userDto);
             userService.createUser(user);
-        // Demonstracja how to use @RequestBody
         System.out.println("User with e-mail: " + userDto.email() + "passed to the request");
         } catch (Exception e) {
             throw new IllegalArgumentException("Cannot add user with email: " + userDto.email() + " with error: " + e.getMessage());
@@ -110,14 +109,6 @@ class UserController {
             throw new IllegalArgumentException("Cannot delete user with ID: " + userId + " with error: " + e.getMessage());
         }
     }
-
-  //  @GetMapping("/email")
-  //  public List<UserEmailSimpleDto> getUserByEmail(@RequestParam String email) {
-  //      return userService.getUserByEmailIgnoreCase(email)
-  //              .stream()
-  //              .map(userEmailSimpleMapper::toEmailSimpleDto)
-  //              .toList();
-  //  }
 
     @GetMapping("/older/{time}")
     public List<UserDto> getUsersOlderThan(@PathVariable LocalDate time) {

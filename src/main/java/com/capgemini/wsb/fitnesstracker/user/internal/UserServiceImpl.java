@@ -52,12 +52,6 @@ class UserServiceImpl implements UserService, UserProvider {
         return userRepository.findByEmailFragmentIgnoreCase(emailFragment);
     }
 
-//    @Override
-//    public List<User> getUsersByBirthDateBefore(LocalDate date) {
-//        return userRepository.findByBirthDateBefore(date);
-//    }
-
-
     @Override
     public List<User> getUsersOlderThan(LocalDate date) {
         return userRepository.findByBirthDateBefore(date);
@@ -77,10 +71,15 @@ class UserServiceImpl implements UserService, UserProvider {
         return userRepository.save(user);
     }
 
-
     @Override
     public void deleteUser(final Long userId) {
         log.info("Deleting User with ID {}", userId);
         userRepository.deleteById(userId);
     }
+
+    @Override
+    public Optional<User> getUserByBirthdate(LocalDate birthdate) {
+        return userRepository.findByBirthdate(birthdate);
+    }
+
 }
