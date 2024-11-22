@@ -4,14 +4,14 @@ import java.util.Date;
 
 public class TrainingDto {
     private Long id;
-    private UserDto user;          // Zagnieżdżony obiekt użytkownika
-    private Date startTime;        // Czas rozpoczęcia treningu
-    private Date endTime;          // Czas zakończenia treningu
-    private String activityType;   // Typ aktywności (np. Running, Cycling)
-    private Double distance;       // Dystans
-    private Double averageSpeed;   // Średnia prędkość
+    private UserDto user;
+    private Date startTime;
+    private Date endTime;
+    private String activityType;
+    private Double distance;
+    private Double averageSpeed;
 
-    // Konstruktor z wszystkimi polami
+
     public TrainingDto(
             Long id,
             UserDto user,
@@ -30,7 +30,7 @@ public class TrainingDto {
         this.averageSpeed = averageSpeed;
     }
 
-    // Gettery i Settery
+
     public Long getId() {
         return id;
     }
@@ -87,14 +87,14 @@ public class TrainingDto {
         this.averageSpeed = averageSpeed;
     }
 
-    // Klasa UserDto jako zagnieżdżona
+
     public static class UserDto {
         private Long id;
         private String firstName;
         private String lastName;
         private String email;
 
-        // Konstruktor
+
         public UserDto(Long id, String firstName, String lastName, String email) {
             this.id = id;
             this.firstName = firstName;
