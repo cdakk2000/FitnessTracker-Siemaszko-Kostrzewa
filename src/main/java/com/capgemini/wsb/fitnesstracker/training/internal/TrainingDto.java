@@ -1,14 +1,10 @@
-package com.capgemini.wsb.fitnesstracker.training.api;
+package com.capgemini.wsb.fitnesstracker.training.internal;
 
-import com.capgemini.wsb.fitnesstracker.training.internal.ActivityType;
 import com.capgemini.wsb.fitnesstracker.user.api.UserDto;
-import jakarta.annotation.Nullable;
+import io.micrometer.common.lang.Nullable;
 
 import java.util.Date;
 
-/**
- * Data transfer object (DTO) representing a training.
- */
 public record TrainingDto(
         @Nullable Long id,
         UserDto user,
@@ -17,4 +13,4 @@ public record TrainingDto(
         ActivityType activityType,
         double distance,
         double averageSpeed
-){ }
+){}

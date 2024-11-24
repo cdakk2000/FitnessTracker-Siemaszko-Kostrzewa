@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 
-@Service
+
 public interface TrainingService {
     List<Training> findAllTrainings();
-    List<TrainingDto> getTrainingsByUserId(Long userId);
+    Training createTraining(Training training);
+    List<Training> getTrainingsByUserId(Long userId);
     List<Training> getTrainingsByActivityType(ActivityType activityType);
     List<Training> getTrainingsFinishedAfter(Date dateTo);
+    Training updateTraining(Long id, Training training);
 }

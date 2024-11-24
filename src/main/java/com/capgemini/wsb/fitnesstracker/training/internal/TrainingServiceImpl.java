@@ -5,6 +5,8 @@ import com.capgemini.wsb.fitnesstracker.training.api.TrainingDto;
 import com.capgemini.wsb.fitnesstracker.training.api.TrainingProvider;
 import com.capgemini.wsb.fitnesstracker.training.api.TrainingService;
 import com.capgemini.wsb.fitnesstracker.user.api.User;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -14,15 +16,12 @@ import java.util.stream.Collectors;
 
 // TODO: Provide Impl
 @Service
+@RequiredArgsConstructor
 public class TrainingServiceImpl implements TrainingService, TrainingProvider {
 
     private final TrainingRepository trainingRepository;
     private final TrainingMapper trainingMapper;
 
-    public TrainingServiceImpl(TrainingRepository trainingRepository, TrainingMapper trainingMapper) {
-        this.trainingRepository = trainingRepository;
-        this.trainingMapper = trainingMapper;
-    }
 
     @Override
     public Optional<User> getTraining(final Long trainingId) {
@@ -36,11 +35,17 @@ public class TrainingServiceImpl implements TrainingService, TrainingProvider {
     }
 
     @Override
-    public List<TrainingDto> getTrainingsByUserId(Long userId) {
-        return trainingRepository.findByUserId(userId)
-                .stream()
-                .map(trainingMapper::toDto)
-                .collect(Collectors.toList());
+    public Training createTraining(Training training)
+    {
+        if (training.getId() != null) {
+            throw new IllegalArgumentException("Training id is already set");
+        }
+        return trainingRepository.save(training);
+    }
+
+    @Override
+    public List<Training> getTrainingsByUserId(Long userId) {
+        return trainingRepository.findByUserId(userId);
     }
 
     @Override
@@ -50,8 +55,25 @@ public class TrainingServiceImpl implements TrainingService, TrainingProvider {
                 .collect(Collectors.toList());
     }
 
+
     @Override
     public List<Training> getTrainingsByActivityType(ActivityType activityType) {
         return trainingRepository.findByActivityType(activityType);
     }
+
+    @Override
+    public Training updateTraining(Long id, Training updatedTraining) {
+        Training existingTraining = trainingRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Training not found for ID: " + id));
+
+        if (updatedTraining.getStartTime() != null) existingTraining.setStartTime(updatedTraining.getStartTime());
+        if (updatedTraining.getEndTime() != null) existingTraining.setEndTime(updatedTraining.getEndTime());
+        if (updatedTraining.getActivityType() != null) existingTraining.setActivityType(updatedTraining.getActivityType());
+        if (updatedTraining.getDistance() != 0) existingTraining.setDistance(updatedTraining.getDistance());
+        if (updatedTraining.getAverageSpeed() != 0) existingTraining.setAverageSpeed(updatedTraining.getAverageSpeed());
+
+        return trainingRepository.save(existingTraining);
+    }
 }
+
+

@@ -1,11 +1,10 @@
 package com.capgemini.wsb.fitnesstracker.user.internal;
 
 import com.capgemini.wsb.fitnesstracker.user.api.User;
-import com.capgemini.wsb.fitnesstracker.user.api.UserEmailSimpleDto;
+import com.capgemini.wsb.fitnesstracker.user.api.UserDto;
+import com.capgemini.wsb.fitnesstracker.user.api.UserMapper;
 import com.capgemini.wsb.fitnesstracker.user.api.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,18 +44,19 @@ class UserController {
                 .orElseThrow(() -> new IllegalArgumentException("User with ID: " + userId + " not found"));
     }
 
-    @GetMapping("/userEmail")
-    public UserDto getUserByEmail(@RequestParam String email) {
+    @GetMapping("/email")
+    public List<UserEmailSimpleDto> getUserByEmail(@RequestParam String email) {
         return userService.getUserByEmail(email)
-                .map(userMapper::toDto)
-                .orElseThrow(() -> new UserNotFoundException("User not found with email " + email));
+                .stream()
+                .map(userEmailSimpleMapper::toEmailSimpleDto)
+                .toList();
     }
 
     @GetMapping("/searchByEmail")
-    public List<UserEmailSimpleDto> searchUsersByEmail(@RequestParam String emailFragment) {
+    public List<UserDto> searchUsersByEmail(@RequestParam String emailFragment) {
         return userService.getUsersByEmailFragment(emailFragment)
                 .stream()
-                .map(userEmailSimpleMapper::toDto)
+                .map(userMapper::toDto)
                 .toList();
     }
 

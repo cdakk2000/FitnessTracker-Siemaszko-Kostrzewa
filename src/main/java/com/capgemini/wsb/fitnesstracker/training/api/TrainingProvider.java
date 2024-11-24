@@ -22,5 +22,5 @@ public interface TrainingProvider {
 
     List<Training> getTrainingsFinishedAfter(Date endTime);
 
-
+    List<Training> getTrainingsByUserId(Long userId);
 }

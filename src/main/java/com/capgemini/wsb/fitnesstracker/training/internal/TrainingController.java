@@ -1,16 +1,16 @@
 package com.capgemini.wsb.fitnesstracker.training.internal;
 
 import com.capgemini.wsb.fitnesstracker.training.api.Training;
-import com.capgemini.wsb.fitnesstracker.training.api.TrainingDto;
 import com.capgemini.wsb.fitnesstracker.training.api.TrainingService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -32,8 +32,11 @@ public class TrainingController {
     }
 
     @GetMapping("/{userId}")
-    public List<Training> getTrainingsByUserId(@PathVariable Long userId) {
-        return trainingRepository.findByUserId(userId);
+    public List<TrainingDto> getTrainingsByUserId(@PathVariable Long userId) {
+        return trainingService.getTrainingsByUserId(userId)
+                .stream()
+                .map(trainingMapper::toDto)
+                .toList();
     }
 
     @GetMapping("/finished/{dateTo}")
@@ -54,5 +57,19 @@ public class TrainingController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public TrainingDto createTraining(@RequestBody @Valid TrainingDtoUserId trainingDtoUserId) {
+        Training training = trainingMapper.toEntity(trainingDtoUserId);
+        Training savedTraining = trainingService.createTraining(training);
+        return trainingMapper.toDto(savedTraining);
+    }
+
+    @PutMapping("/{id}")
+    public TrainingDto updateTraining(@PathVariable Long id, @RequestBody TrainingDtoUserId trainingDto) {
+        Training updatedTraining = trainingService.updateTraining(id, trainingMapper.toEntity(trainingDto));
+        return trainingMapper.toDto(updatedTraining);
     }
 }
